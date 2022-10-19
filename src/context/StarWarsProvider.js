@@ -5,23 +5,95 @@ import StarWarsContext from './StarWarsContext';
 function StarWarsProvider({ children }) {
   const [planetsList, setPlanetsList] = useState([]);
   const [planet, setPlanet] = useState('');
+  const [column, setColumn] = useState('population');
+  const [quantity, setQuantity] = useState(0);
+  const [quantityForm, setQuantityForm] = useState('maior que');
+
+  const columns = ({ target: { value } }) => {
+    setColumn(value);
+  };
+
+  const getQuantity = ({ target: { value } }) => {
+    setQuantity(value);
+  };
+
+  const getQuantitys = ({ target: { value } }) => {
+    setQuantityForm(value);
+  };
+
+  const Filters = () => {
+    if (quantityForm === 'maior que') {
+      const data = planetsList.filter((event) => +event[column] > +quantity);
+      setPlanetsList(data);
+    }
+
+    if (quantityForm === 'menor que') {
+      const data = planetsList.filter((event) => +event[column] < +quantity);
+      setPlanetsList(data);
+    }
+
+    if (quantityForm === 'igual A') {
+      const data = planetsList.filter((event) => +event[column] === +quantity);
+      setPlanetsList(data);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
       const endpoint = await fetch('https://swapi.dev/api/planets');
       const { results } = await endpoint.json();
-      const data = results.filter((element) => delete element.residents);
+      const data = results.map(
+        ({
+          name,
+          climate,
+          created,
+          diameter,
+          edited,
+          films,
+          gravity,
+          orbital_period: orbital,
+          population,
+          rotation_period: rotation,
+          surface_water: surface,
+          terrain,
+          url,
+        }) => ({
+          name,
+          rotation_period: rotation,
+          surface_water: surface,
+          terrain,
+          url,
+          edited,
+          films,
+          climate,
+          diameter,
+          created,
+          gravity,
+          orbital_period: orbital,
+          population,
+        }),
+      );
       setPlanetsList(data);
     };
     getData();
   }, []);
 
-  const handleClick = ({ target: { value } }) => {
+  const handleChange = ({ target: { value } }) => {
     setPlanet(value);
   };
 
   const planets = useMemo(() => ({
-    planetsList, planet, handleClick }), [planetsList, planet]);
+    planetsList,
+    planet,
+    handleChange,
+    column,
+    columns,
+    quantity,
+    quantityForm,
+    getQuantity,
+    getQuantitys,
+    Filters,
+  }), [planetsList, planet, column, quantity, quantityForm]);
 
   return (
     <StarWarsContext.Provider value={ planets }>
@@ -31,7 +103,7 @@ function StarWarsProvider({ children }) {
 }
 
 StarWarsProvider.propTypes = {
-  children: PropTypes.shape(),
+  children: PropTypes.node,
 }.isRequired;
 
 export default StarWarsProvider;
