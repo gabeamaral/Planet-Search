@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function Table() {
-  const { planetsList } = useContext(StarWarsContext);
+  const { planetsList, planet } = useContext(StarWarsContext);
 
   return (
     <main>
@@ -25,23 +25,28 @@ function Table() {
           </tr>
         </thead>
         <tbody>
-          {planetsList.map((val) => (
-            <tr key={ val.name }>
-              <td data-testid="planet-name">{ val.name }</td>
-              <td>{ val.rotation_period }</td>
-              <td>{ val.orbital_period }</td>
-              <td>{ val.diameter }</td>
-              <td>{ val.climate }</td>
-              <td>{ val.gravity }</td>
-              <td>{ val.terrain }</td>
-              <td>{ val.surface_water }</td>
-              <td>{ val.population }</td>
-              <td>{ val.films }</td>
-              <td>{ val.created }</td>
-              <td>{ val.edited }</td>
-              <td>{ val.url }</td>
-            </tr>
-          ))}
+          {planetsList.length > 0 && (
+            planetsList.filter(
+              (val) => val.name.toLowerCase().includes(planet.toLowerCase()),
+            )
+              .map((val) => (
+                <tr key={ val.name }>
+                  <td>{val.name}</td>
+                  <td>{val.climate}</td>
+                  <td>{val.diameter}</td>
+                  <td>{val.edited}</td>
+                  <td>{val.films}</td>
+                  <td>{val.gravity}</td>
+                  <td>{val.orbital_period}</td>
+                  <td>{val.population}</td>
+                  <td>{val.rotation_period}</td>
+                  <td>{val.surface_water}</td>
+                  <td>{val.created}</td>
+                  <td>{val.terrain}</td>
+                  <td>{val.url}</td>
+                </tr>
+              ))
+          )}
         </tbody>
       </table>
     </main>

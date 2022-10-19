@@ -4,6 +4,7 @@ import StarWarsContext from './StarWarsContext';
 
 function StarWarsProvider({ children }) {
   const [planetsList, setPlanetsList] = useState([]);
+  const [planet, setPlanet] = useState('');
 
   useEffect(() => {
     const getData = async () => {
@@ -15,7 +16,13 @@ function StarWarsProvider({ children }) {
     getData();
   }, []);
 
-  const planets = useMemo(() => ({ planetsList }), [planetsList]);
+  const handleClick = ({ target: { value } }) => {
+    setPlanet(value);
+  };
+
+  const planets = useMemo(() => ({
+    planetsList, planet, handleClick }), [planetsList, planet]);
+
   return (
     <StarWarsContext.Provider value={ planets }>
       {children}
