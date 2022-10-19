@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+// passei na 8 junto.
 
 test('I am your test', async () => {
   render(<App />);
