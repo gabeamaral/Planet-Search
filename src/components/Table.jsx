@@ -30,7 +30,7 @@ function Table() {
               (val) => val.name.toLowerCase().includes(planet.toLowerCase()),
             )
               .map((val) => (
-                <tr key={ val.name }>
+                <tr data-testid="planets" key={ val.name }>
                   <td>{val.name}</td>
                   <td>{val.climate}</td>
                   <td>{val.diameter}</td>

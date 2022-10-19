@@ -12,12 +12,14 @@ function Form() {
     column,
     columns,
     Filters,
+    optionsNumerics,
   } = useContext(StarWarsContext);
 
   return (
     <main>
       <input
         type="text"
+        placeholder="planetas"
         data-testid="name-filter"
         value={ planet }
         onChange={ handleChange }
@@ -27,13 +29,7 @@ function Form() {
         value={ column }
         onChange={ columns }
       >
-        {[
-          'population',
-          'orbital_period',
-          'diameter',
-          'rotation_period',
-          'surface_water',
-        ].map((event) => (
+        {optionsNumerics.map((event) => (
           <option key={ event } value={ event }>
             {event}
           </option>

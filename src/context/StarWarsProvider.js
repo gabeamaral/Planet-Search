@@ -2,12 +2,17 @@ import { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import StarWarsContext from './StarWarsContext';
 
+const options = ['population', 'orbital_period', 'diameter', 'rotation_period',
+  'surface_water'];
+
 function StarWarsProvider({ children }) {
   const [planetsList, setPlanetsList] = useState([]);
   const [planet, setPlanet] = useState('');
   const [column, setColumn] = useState('population');
   const [quantity, setQuantity] = useState(0);
   const [quantityForm, setQuantityForm] = useState('maior que');
+  const [filtersNumerics, setNumerics] = useState([]);
+  const [optionsNumerics, setOptionsNumerics] = useState(options);
 
   const columns = ({ target: { value } }) => {
     setColumn(value);
@@ -36,6 +41,12 @@ function StarWarsProvider({ children }) {
       const data = planetsList.filter((event) => +event[column] === +quantity);
       setPlanetsList(data);
     }
+
+    setNumerics([...filtersNumerics,
+      { column, comparison: quantityForm, value: quantity }]);
+    const filter = optionsNumerics.filter((e) => e !== column);
+    setOptionsNumerics(filter);
+    setColumn(filter[0]);
   };
 
   useEffect(() => {
@@ -93,7 +104,9 @@ function StarWarsProvider({ children }) {
     getQuantity,
     getQuantitys,
     Filters,
-  }), [planetsList, planet, column, quantity, quantityForm]);
+    filtersNumerics,
+    optionsNumerics,
+  }), [planetsList, planet, column, quantity, quantityForm, filtersNumerics]);
 
   return (
     <StarWarsContext.Provider value={ planets }>
